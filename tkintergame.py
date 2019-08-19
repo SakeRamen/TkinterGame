@@ -22,7 +22,7 @@ canvas = tk.Canvas(master,bg='#6BE0E7',height = step*N_X,width=step*N_Y)
 
 player = Player('#29D6DA')
 player.draw();
-exit_g = Player('yellow')
+exit_g = Player('#F7F8A2')
 exit_g.draw();
 
 canvas.pack()
