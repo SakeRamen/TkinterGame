@@ -34,8 +34,8 @@ class Enemy(Player):
        super().__init__(color)
 
 class EnemyD(Enemy):
-    def __init__(this):
-       super().__init__('pink')
+    def __init__(this, color = 'pink'):
+       super().__init__(color)
 
     def randomStep(this):
         r = random.randint(1,4)
@@ -47,13 +47,32 @@ class EnemyD(Enemy):
             super().repaint( 0, step)
         else:
             super().repaint(0, -step)
+            
+class EnemyC(EnemyD):
+    def __init__(this):
+       super().__init__('green')
+
+    def Phunter(this):
+        if key == 87 or key == 38:
+            super().repaint(0, -step)
+        elif key == 83 or key == 40:
+            super().repaint(0, step)
+        elif key == 65 or key == 37:
+            super().repaint(-step, 0)
+        elif key == 68 or key == 39:
+            super().repaint(step, 0)
 
 class Semen(Player):
     def checkPos(this, other):
         return ((this.x == other.x) and (this.y == other.y))
 
     def __init__(this):
-       super().__init__('#32F366')
+        this.x,this.y = -1,-1
+        while (this.x,this.y) in Player.objects:
+            this.x = this.randomPoz(N_X)
+            this.y = this.randomPoz(N_Y)
+        Player.objects.add((this.x,this.y))
+        this.player = canvas.create_image((this.x, this.y),image=player_image, anchor='nw')
        
 def keyPress(event):
     print(event)
@@ -72,7 +91,6 @@ def keyListener(key):
             player.repaint(-step, 0)
         elif key == 68 or key == 39:
             player.repaint(step, 0)
-        
 
 def enemiesStep():
     for Enemy in enemies_d:    
@@ -82,7 +100,7 @@ def endGame():
     if player.checkPos(exit_g):
         print('YOU WON!')
         print('Game over')
-    enemies = enemies_d + enemies_s
+    enemies = enemies_d + enemies_s + enemies_c
     for enemy in enemies:
         if player.checkPos(enemy):
             print('YOU DIED!')
@@ -90,25 +108,32 @@ def endGame():
             break
 
 def addEnemies():
-    for i in range(10):
+    for i in range(5):
         enemy = Enemy()
         enemies_s.append(enemy)
-    for i in range(6):
+    for i in range(3):
         enemy = EnemyD()
         enemies_d.append(enemy)
+    for i in range(2):
+        enemy = EnemyC()
+        enemies_c.append(enemy)
     
-master = tk.Tk()
+root = tk.Tk()
 step = 60
 N_X = 10
 N_Y = 10
+enemies_c = []
 enemies_s = []
 enemies_d = []
-canvas = tk.Canvas(master,bg='#00FFFF',height = step*N_X,width=step*N_Y)
+canvas = tk.Canvas(root,bg='#00FFFF',height = step*N_X,width=step*N_Y)
+path = 'images/catcher.png'
+img = tk.PhotoImage(path)
+canvas.create_image(30,30, player_image)
 
 addEnemies()
 player = Semen()
 exit_g = Exit()
 
 canvas.pack()
-master.bind('<KeyPress>', keyPress)
-master.mainloop()
+root.bind('<KeyPress>', keyPress)
+root.mainloop()
