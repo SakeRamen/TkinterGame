@@ -1,5 +1,6 @@
 import tkinter as tk
 import random
+import math
 
 class Player:
     objects ={(-1,-1)}
@@ -25,17 +26,45 @@ class Player:
         this.y = (this.y +y)%(step*N_Y)
         canvas.move(this.player,(this.x - old_x),(this.y-old_y))
 
-class Exit(Player):
+class Semen(Player):
+    def checkPos(this, other):
+        return ((this.x == other.x) and (this.y == other.y))
+
     def __init__(this):
-       super().__init__('#F0FC53') 
+        this.x,this.y = -1,-1
+        while (this.x,this.y) in Player.objects:
+            this.x = this.randomPoz(N_X)
+            this.y = this.randomPoz(N_Y)
+        Player.objects.add((this.x,this.y))
+        this.player = canvas.create_image((this.x, this.y),image=img, anchor='nw')
+       
+
+class Exit(Player):
+     def __init__(this):
+        this.x,this.y = -1,-1
+        while (this.x,this.y) in Exit.objects:
+            this.x = this.randomPoz(N_X)
+            this.y = this.randomPoz(N_Y)
+        Player.objects.add((this.x,this.y))
+        this.player = canvas.create_image((this.x, this.y),image=save, anchor='nw') 
 
 class Enemy(Player):
-    def __init__(this, color = 'red'):
-       super().__init__(color)
+    def __init__(this):
+        this.x,this.y = -1,-1
+        while (this.x,this.y) in Enemy.objects:
+            this.x = this.randomPoz(N_X)
+            this.y = this.randomPoz(N_Y)
+        Player.objects.add((this.x,this.y))
+        this.player = canvas.create_image((this.x, this.y),image=png, anchor='nw')
 
 class EnemyD(Enemy):
-    def __init__(this, color = 'pink'):
-       super().__init__(color)
+    def __init__(this):
+        this.x,this.y = -1,-1
+        while (this.x,this.y) in EnemyD.objects:
+            this.x = this.randomPoz(N_X)
+            this.y = this.randomPoz(N_Y)
+        Player.objects.add((this.x,this.y))
+        this.player = canvas.create_image((this.x, this.y),image=img1, anchor='nw')
 
     def randomStep(this):
         r = random.randint(1,4)
@@ -50,33 +79,25 @@ class EnemyD(Enemy):
             
 class EnemyC(EnemyD):
     def __init__(this):
-       super().__init__('green')
+        this.x,this.y = -1,-1
+        while (this.x,this.y) in EnemyC.objects:
+            this.x = this.randomPoz(N_X)
+            this.y = this.randomPoz(N_Y)
+        Player.objects.add((this.x,this.y))
+        this.player = canvas.create_image((this.x, this.y),image=img1, anchor='nw')
 
     def Phunter(this):
         if key == 87 or key == 38:
             super().repaint(0, -step)
         elif key == 83 or key == 40:
-            super().repaint(0, step)
+            super().repaint(0, -step)
         elif key == 65 or key == 37:
             super().repaint(-step, 0)
         elif key == 68 or key == 39:
             super().repaint(step, 0)
 
-class Semen(Player):
-    def checkPos(this, other):
-        return ((this.x == other.x) and (this.y == other.y))
-
-    def __init__(this):
-        this.x,this.y = -1,-1
-        while (this.x,this.y) in Player.objects:
-            this.x = this.randomPoz(N_X)
-            this.y = this.randomPoz(N_Y)
-        Player.objects.add((this.x,this.y))
-        this.player = canvas.create_image((this.x, this.y),image=player_image, anchor='nw')
-       
 def keyPress(event):
-    print(event)
-    keys = {37,38.39,40,65,68,83,87}
+    keys = {37,38,39,40,65,68,83,87}
     if event.keycode in keys:
         keyListener(event.keycode)
         enemiesStep()
@@ -99,11 +120,13 @@ def enemiesStep():
 def endGame():
     if player.checkPos(exit_g):
         print('YOU WON!')
+        root.destroy()
         print('Game over')
     enemies = enemies_d + enemies_s + enemies_c
     for enemy in enemies:
         if player.checkPos(enemy):
             print('YOU DIED!')
+            root.destroy()
             print('Game over')
             break
 
@@ -126,9 +149,11 @@ enemies_c = []
 enemies_s = []
 enemies_d = []
 canvas = tk.Canvas(root,bg='#00FFFF',height = step*N_X,width=step*N_Y)
-path = 'images/catcher.png'
-img = tk.PhotoImage(path)
-canvas.create_image(30,30, player_image)
+
+img = tk.PhotoImage(file='images\catcher.png')
+img1 = tk.PhotoImage(file='images\dog.png')
+save = tk.PhotoImage(file='images\exit.png')
+png = tk.PhotoImage(file='images\cow.png')
 
 addEnemies()
 player = Semen()
@@ -137,3 +162,4 @@ exit_g = Exit()
 canvas.pack()
 root.bind('<KeyPress>', keyPress)
 root.mainloop()
+exit()
