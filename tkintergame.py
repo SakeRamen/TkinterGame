@@ -89,14 +89,15 @@ class EnemyC(EnemyD):
         this.player = canvas.create_image((this.x, this.y),image=img1, anchor='nw')
 
     def Phunter(this):
-        if key == 87 or key == 38:
-            super().repaint(0, -step)
-        elif key == 83 or key == 40:
-            super().repaint(0, -step)
-        elif key == 65 or key == 37:
+        r = random.randint(1,4)
+        if r == 1:
+            super().repaint( step, 0)
+        elif r == 2:
             super().repaint(-step, 0)
-        elif key == 68 or key == 39:
-            super().repaint(step, 0)
+        elif r == 3:
+            super().repaint( 0, step)
+        else:
+            super().repaint(0, -step)
 
 def keyPress(event):
     keys = {37,38,39,40,65,68,83,87}
@@ -118,6 +119,8 @@ def keyListener(key):
 def enemiesStep():
     for Enemy in enemies_d:    
         Enemy.randomStep()
+    for Enemy in enemies_c:    
+         Enemy.Phunter()
 
 def endGame():
     if player.checkPos(exit_g):
@@ -151,6 +154,9 @@ enemies_c = []
 enemies_s = []
 enemies_d = []
 canvas = tk.Canvas(root,bg='#00FFFF',height = step*N_X,width=step*N_Y)
+#background_image=tk.PhotoImage(file='images\grassbg.jpg')
+#background_label = tk.Label(parent, image=background_image)
+#background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
 img = tk.PhotoImage(file='images\catcher.png')
 img1 = tk.PhotoImage(file='images\dog.png')

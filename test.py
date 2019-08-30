@@ -1,10 +1,9 @@
-from tkinter import*
-#from tkinter.ttk import Progressbar
-#from tkinter import ttk
-#import math
+from tkinter import *
 import random
 
 class Player:
+    HP = 3
+    print('HP =',HP)
     objects ={(-1,-1)}
     
     def __init__(this,color):
@@ -40,9 +39,8 @@ class Semen(Player):
         Player.objects.add((this.x,this.y))
         this.player = canvas.create_image((this.x, this.y),image=img, anchor='nw')
        
-
 class Exit(Player):
-     def __init__(this):
+    def __init__(this):
         this.x,this.y = -1,-1
         while (this.x,this.y) in Exit.objects:
             this.x = this.randomPoz(N_X)
@@ -126,27 +124,27 @@ def endGame():
         print('Game over')
     enemies = enemies_d + enemies_s + enemies_c
     for enemy in enemies:
-        if player.checkPos(enemy):
+        if player.HP == 0:#player.checkPos(enemy)
             print('YOU DIED!')
             root.destroy()
             print('Game over')
             break
 
 def addEnemies():
-    for i in range(5):
+    for i in range(10):
         enemy = Enemy()
         enemies_s.append(enemy)
-    for i in range(3):
+    for i in range(6):
         enemy = EnemyD()
         enemies_d.append(enemy)
-    for i in range(2):
+    for i in range(4):
         enemy = EnemyC()
         enemies_c.append(enemy)
     
 root = Tk()
 step = 60
-N_X = 10
-N_Y = 10
+N_X = 15
+N_Y = 15
 enemies_c = []
 enemies_s = []
 enemies_d = []
@@ -160,13 +158,6 @@ png = PhotoImage(file='images\cow.png')
 addEnemies()
 player = Semen()
 exit_g = Exit()
-
-#style = Style()
-#style.theme_use('default')
-#style.configure("red.Horizontal.TProgressbar", background='red')
-#bar = Progressbar(root, length=350, style='red.Horizontal.TProgressbar')
-#bar['value'] = 100
-#bar.grid(column=0, row=0)
 
 canvas.pack()
 root.bind('<KeyPress>', keyPress)
