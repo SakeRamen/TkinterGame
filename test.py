@@ -1,4 +1,4 @@
-import tkinter as tk
+from tkinter import*
 #from tkinter.ttk import Progressbar
 #from tkinter import ttk
 #import math
@@ -143,25 +143,25 @@ def addEnemies():
         enemy = EnemyC()
         enemies_c.append(enemy)
     
-root = tk.Tk()
+root = Tk()
 step = 60
 N_X = 10
 N_Y = 10
 enemies_c = []
 enemies_s = []
 enemies_d = []
-canvas = tk.Canvas(root,bg='#00FFFF',height = step*N_X,width=step*N_Y)
+canvas = Canvas(root,bg='#00FFFF',height = step*N_X,width=step*N_Y)
 
-img = tk.PhotoImage(file='images\catcher.png')
-img1 = tk.PhotoImage(file='images\dog.png')
-save = tk.PhotoImage(file='images\exit.png')
-png = tk.PhotoImage(file='images\cow.png')
+img = PhotoImage(file='images\catcher.png')
+img1 = PhotoImage(file='images\dog.png')
+save = PhotoImage(file='images\exit.png')
+png = PhotoImage(file='images\cow.png')
 
 addEnemies()
 player = Semen()
 exit_g = Exit()
 
-#style = ttk.Style()
+#style = Style()
 #style.theme_use('default')
 #style.configure("red.Horizontal.TProgressbar", background='red')
 #bar = Progressbar(root, length=350, style='red.Horizontal.TProgressbar')
